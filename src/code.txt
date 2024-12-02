@@ -5,3 +5,10 @@ git commit -m "first commit"
 git branch -M main
 git remote add origin https://github.com/srinath1/helloworld.git
 git push -u origin main
+
+
+(Get-ECRLoginCommand).Password | docker login --username AWS --password-stdin 586794475877.dkr.ecr.us-east-1.amazonaws.com
+docker build -t hwrepository .
+docker tag hwrepository:latest 586794475877.dkr.ecr.us-east-1.amazonaws.com/hwrepository:latest
+docker push 586794475877.dkr.ecr.us-east-1.amazonaws.com/hwrepository:latest
+
