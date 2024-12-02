@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - main
+env:
+    AWS_REPOSITORY: hwrepository
 jobs:
   deploy:
     name: Deploy
@@ -19,4 +21,16 @@ jobs:
             aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             aws-region: ${{ secrets.AWS_REGION}}
 
+        - name: Login to Amazon ECR
+          id: login-ecr
+          uses: aws-actions/amazon-ecr-login@62f4f872db3836360b72999f4b87f1ff13310f3a
 
+        - name: Build ,tag & push Image
+          id: build-image
+          env:
+            IMAGE_TAG: ${{github.sha}}
+          run: |
+            aws ecr get-login-password --region ${{ secrets.AWS_REGION}} | docker login --username AWS --password-stdin 586794475877.dkr.ecr.us-east-1.amazonaws.com
+            docker build -t $AWS_REPOSITORY:$IMAGE_TAG .
+            docker tag $AWS_REPOSITORY:$IMAGE_TAG 586794475877.dkr.ecr.us-east-1.amazonaws.com/$AWS_REPOSITORY:$IMAGE_TAG
+            docker push 586794475877.dkr.ecr.us-east-1.amazonaws.com/$AWS_REPOSITORY:$IMAGE_TAG
