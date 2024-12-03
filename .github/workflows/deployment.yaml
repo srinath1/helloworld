@@ -43,7 +43,7 @@ jobs:
              aws ecs describe-task-definition --task-definition helloworldtask \
              --query taskDefinition > task-definition.json
 
-        - name: Fill in new image ID in task definition1
+        - name: Fill in new image ID in task definition
           id: task-def
           uses: aws-actions/amazon-ecs-render-task-definition@v1
           with:
