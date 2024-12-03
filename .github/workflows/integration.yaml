@@ -24,7 +24,13 @@ jobs:
             - name: Install dependencies
               run:  npm install
             - name: Run init tests
-              run:  npm run test              
+              run:  npm run test    
+            - name: Download Task Definition
+              run: |
+                aws ecs describe-task-definition --task-definition helloworldtask \ --query taskDefinition>taskDefinition.json
+
+            - name: Read Task Definition
+              run: cat task-definition.json
 
 
 
