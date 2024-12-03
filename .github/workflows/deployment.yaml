@@ -39,7 +39,7 @@ jobs:
             docker push public.ecr.aws/g0m9a0z2/$AWS_REPOSITORY:$IMAGE_TAG
             echo "::set-output name=image::586794475877.dkr.ecr.us-east-1.amazonaws.com/$AWS_REPOSITORY:$IMAGE_TAG"
            
-        - name: Download Task Definition
+        - name: Download Task Definition1
           run: |
              aws ecs describe-task-definition --task-definition helloworldtask \
              --query taskDefinition > task-definition.json
