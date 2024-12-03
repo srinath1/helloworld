@@ -56,7 +56,7 @@ jobs:
            task-definition: task-definition.json
            service: ${{ env.ECS_SERVICE }}
            cluster: ${{ env.ECS_CLUSTER }}
-           wait-for-service-stability:  true
+           
         - name: Force redeploy
           run: |
               aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --region ${{ secrets.AWS_REGION }} --force-new-deployment 
