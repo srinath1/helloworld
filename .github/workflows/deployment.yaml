@@ -37,7 +37,8 @@ jobs:
            
         - name: Download Task Definition
           run: |
-              aws ecs describe-task-definition --task-definition helloworldtask \ --query taskDefinition>taskDefinition.json
+             aws ecs describe-task-definition --task-definition helloworldtask \
+             --query taskDefinition > task-definition.json
 
         - name: Read Task Definition
           run: cat task-definition.json
