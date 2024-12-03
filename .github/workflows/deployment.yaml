@@ -34,11 +34,16 @@ jobs:
             docker build -t $AWS_REPOSITORY:$IMAGE_TAG .
             docker tag $AWS_REPOSITORY:$IMAGE_TAG 586794475877.dkr.ecr.us-east-1.amazonaws.com/$AWS_REPOSITORY:$IMAGE_TAG
             docker push 586794475877.dkr.ecr.us-east-1.amazonaws.com/$AWS_REPOSITORY:$IMAGE_TAG
+            echo "::set-output name=image::586794475877.dkr.ecr.us-east-1.amazonaws.com/$AWS_REPOSITORY:$IMAGE_TAG"
            
         - name: Download Task Definition
           run: |
              aws ecs describe-task-definition --task-definition helloworldtask \
              --query taskDefinition > task-definition.json
+
+        - name: update taskDefinition.json
+          run:  echo "`jq '.containerDefinitions[0].image="${{ steps.build-image.outputs.image }}"' task-definition.json`" > task-definition.json
+  
 
         - name: Read Task Definition
           run: cat task-definition.json
