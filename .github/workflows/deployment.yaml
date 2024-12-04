@@ -7,6 +7,8 @@ env:
     AWS_REPOSITORY: helloworldrepository
     ECS_SERVICE:  helloworldservice
     ECS_CLUSTER: helloworldcluster
+    ECS_TASK_DEFINITION: .aws/task-definition.json
+    CONTAINER_NAME: helloworldcontainer
 jobs:
   deploy:
     name: Deploy
@@ -39,17 +41,17 @@ jobs:
             docker push public.ecr.aws/g0m9a0z2/$AWS_REPOSITORY:$IMAGE_TAG
             echo "::set-output name=image::586794475877.dkr.ecr.us-east-1.amazonaws.com/$AWS_REPOSITORY:$IMAGE_TAG"
            
-        - name: Download Task Definition
-          run: |
-             aws ecs describe-task-definition --task-definition helloworldtask \
-             --query taskDefinition > task-definition.json
+        # - name: Download Task Definition
+        #   run: |
+        #      aws ecs describe-task-definition --task-definition helloworldtask \
+        #      --query taskDefinition > task-definition.json
 
         - name: Fill in new image ID in task definition
           id: task-def
           uses: aws-actions/amazon-ecs-render-task-definition@c804dfbdd57f713b6c079302a4c01db7017a36fc
-          with: 
-            task-definition: task-definition.json 
-            container-name: helloworldcontainer 
+          with:
+            task-definition: ${{ env.ECS_TASK_DEFINITION }}
+            container-name: ${{ env.CONTAINER_NAME }}
             image: ${{ steps.build-image.outputs.image }}
 
         - name: Read Task Definition
